@@ -115,15 +115,19 @@
     </div>
 
     <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxDQ-eKLz0nT-YF_tfmCXAEq01Wjptvmqw6sQ2hqnJIu5MdievqF30fQEut5eg7Qc73g/exec";
+// Đường link API Web App chuẩn (Không chứa dấu cách lỗi)
+const API_URL = "https://script.google.com/macros/s/AKfycbxDQ-eKLz0nT-YF_tfmCXAEq01Wjptvmqw6sQ2hqnJIu5MdievqF30fQEut5eg7Qc73g/exec"; 
+
 function toggleModal(id, show) {
     const m = document.getElementById(id);
     if (show) m.classList.remove('hidden'); else m.classList.add('hidden');
 }
 
+// 1. HÀM TẢI DANH SÁCH TÀI LIỆU (Đã chuyển sang FETCH)
 function loadDocuments() {
     const search = document.getElementById('searchInput').value;
     const category = document.getElementById('categoryFilter').value;
+    
     fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify({ action: "getDocuments", searchTerm: search, categoryFilter: category })
@@ -143,6 +147,7 @@ function loadDocuments() {
     }).catch(err => console.error("Lỗi tải dữ liệu:", err));
 }
 
+// 2. HÀM LƯU TÀI LIỆU MỚI
 function saveDocument(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
@@ -172,13 +177,16 @@ function saveDocument(e) {
     } else { btn.innerHTML = "Tải Lên Hệ Thống"; btn.disabled = false; alert("Vui lòng chọn file!"); }
 }
 
+// 3. HÀM XÓA TÀI LIỆU
 function deleteDocument(rowIndex) {
     if (confirm("Bạn có chắc chắn muốn xóa giấy tờ này?")) {
         fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: "deleteDocument", rowIndex: rowIndex }) })
         .then(res => res.json()).then(res => { if (res.success) loadDocuments(); }).catch(err => alert("Lỗi khi xóa: " + err));
     }
 }
+
+// Tự động tải danh sách khi vừa mở trang web
 window.onload = function() { loadDocuments(); };
- </script>
+</script> 
 </body>
 </html>
